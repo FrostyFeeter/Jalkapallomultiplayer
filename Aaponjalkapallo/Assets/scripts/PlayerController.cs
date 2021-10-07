@@ -12,19 +12,31 @@ public class PlayerController : MonoBehaviour
 
     public Transform groundCheck;
     public float groundDistance = 0.1f;
-    public LayerMask ground;
+    public LayerMask groundMask;
 
     [SerializeField] private bool isGrounded;
 
-    // Start is called before the first frame update
+    private Vector3 velocity;
+
     void Start()
     {
-        
+        controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        CheckIfGrounded();
     }
+
+    private void CheckIfGrounded()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        if(isGrounded)
+        {
+            velocity.y = -2;
+        }
+
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+    }    
 }
