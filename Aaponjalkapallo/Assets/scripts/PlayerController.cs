@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     CharacterController controller;
+    
     public float moveSpeed = 8f;
     public float runSpeed = 14f;
     public float jumpHeight =3f;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 velocity;
 
+    private Vector3 MoveDir;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -26,6 +28,24 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CheckIfGrounded();
+        Move();
+    }
+
+    private void Move()
+    {
+        float xAxis = Input.GetAxis("Horizontal");
+        float zAxis = Input.GetAxis("Vertical");
+
+        MoveDir = transform.right * xAxis + transform.forward *zAxis;
+
+        float targetSpeed = Input.GetButton("Fire1") ? runSpeed : moveSpeed;
+
+        if(MoveDir == Vector3.zero)
+        {
+            targetSpeed = 0;
+        }
+        
+        controller.Move(MoveDir * targetSpeed * Time.deltaTime);
     }
 
     private void CheckIfGrounded()
