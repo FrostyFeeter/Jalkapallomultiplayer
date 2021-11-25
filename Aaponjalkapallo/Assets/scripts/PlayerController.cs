@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,17 +22,21 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 MoveDir;
     public Animator animator;
+    PhotonView view;
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        
+        view = GetComponent<PhotonView>();
     }
 
     void Update()
     {
-        CheckIfGrounded();
-        Move();
-        Jump();
+        if(view.IsMine)
+        {
+            CheckIfGrounded();
+            Move();
+            Jump();
+        }
     }
 
     private void Move()
